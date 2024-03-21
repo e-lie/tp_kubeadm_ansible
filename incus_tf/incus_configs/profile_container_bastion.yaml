@@ -1,0 +1,47 @@
+config:
+  cloud-init.user-data: |
+    #cloud-config
+    package_upgrade: true
+    packages:
+      - htop
+      - neovim
+      - openssh-server
+      - fail2ban
+      - ufw
+      - nebula
+    users:
+      - name: elie
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        groups: users, admin
+        home: /home/elie
+        shell: /bin/bash
+        lock_passwd: false
+        ssh-authorized-keys:
+          # id_manjatour_bastion
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIImJqBWDQBwnCkoXgyQ0tTWOO35im/n98kNGiB/EM+b8 elie@legiox2
+        keyboard:
+            layout: fr
+    write_files:
+      - path: /etc/ssh/sshd_config
+        content: |
+          Port 2224
+          PermitRootLogin no
+        append: true
+        defer: true # edit file at the end after package install
+    runcmd:
+      - ufw default deny incoming
+      - ufw default allow outgoing
+      - ufw allow 2224/tcp
+      # - ufw allow 4242/udp # for nebula lighthouse
+      - ufw enable
+description: ""
+devices:
+  eth0:
+    name: eth0
+    network: macvlan
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+name: bastion

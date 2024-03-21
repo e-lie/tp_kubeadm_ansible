@@ -1,0 +1,19 @@
+- name: install cilium CNI
+  hosts: localhost
+  
+  tasks:
+    - name: add cilium chart repo
+      kubernetes.core.helm_repository:
+        name: cilium
+        repo_url: "https://helm.cilium.io/"
+        force_update: true
+
+    - name: install cilium chart
+      kubernetes.core.helm:
+        kubeconfig: ~/.kube/inkus.kubeconfig
+        name: cilium
+        chart_ref: cilium/cilium
+        chart_version: 1.15.2
+        release_namespace: kube-system
+        # create_namespace: true
+        values: {}

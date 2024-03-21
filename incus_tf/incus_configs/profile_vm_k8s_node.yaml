@@ -1,0 +1,36 @@
+config:
+  cloud-init.user-data: |
+    #cloud-config
+    package_upgrade: true
+    packages:
+      - htop
+      - neovim
+      - openssh-server
+      - nebula
+    users:
+    - name: kadmin
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      groups: users, admin
+      home: /home/kadmin
+      shell: /bin/bash
+      lock_passwd: false
+      ssh-authorized-keys:
+        # id_k8s_incus
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+kbmTg2ct457z/0fjnAaRys0mP869ckQKo2VagFXxW
+      keyboard:
+          layout: fr
+  limits.cpu: "2"
+  limits.memory: 4GiB
+  security.secureboot: false
+description: ""
+devices:
+  eth0:
+    name: eth0
+    network: macvlan
+    type: nic
+  root:
+    path: /
+    pool: default
+    size: 40GiB
+    type: disk
+name: k8s-node

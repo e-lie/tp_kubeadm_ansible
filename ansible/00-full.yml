@@ -1,0 +1,34 @@
+
+- name: Wait for host to be ready after terraform apply
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Wait for ssh 
+      wait_for:
+        port: 22
+        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        search_regex: OpenSSH
+        delay: 10
+        timeout: 60
+      connection: local
+
+- import_playbook: 01-kernel-and-containerd.yml
+
+- name: Wait for host to be ready after reboot
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Wait for ssh
+      wait_for:
+        port: 22
+        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        search_regex: OpenSSH
+        delay: 10
+        timeout: 60
+      connection: local
+
+- import_playbook: 02-kube-dependencies.yml
+- import_playbook: 03-cluster-init.yml
+- import_playbook: 04-slurp-kubeconfig.yml
+- import_playbook: 05-cilium-cni.yml
+- import_playbook: 06-join-workers.yml

@@ -1,0 +1,13 @@
+- hosts: inkus-cp0
+  become: yes
+
+  tasks:
+    - name: upload kubeadm config
+      template:
+        src: tpl-kubeadm-bundle-config.yaml
+        dest: /root/kubeadm-bundle-config.yaml
+
+    - name: initialize the cluster
+      shell: kubeadm init --config /root/kubeadm-bundle-config.yaml >> /root/cluster_initialized.txt
+      args:
+        creates: /root/cluster_initialized.txt
