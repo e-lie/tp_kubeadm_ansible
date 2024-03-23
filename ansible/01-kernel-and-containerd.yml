@@ -5,52 +5,51 @@
     - name: Deactivate swap
       command: swapoff -a
 
-    - name: create kernel module-load config
-      blockinfile:
-        path: /etc/modules-load.d/containerd.conf
-        block: |
-          overlay 
-          br_netfilter
-        #marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
-        create: yes
-      notify: restart node
+  #   - name: create kernel module-load config
+  #     blockinfile:
+  #       path: /etc/modules-load.d/containerd.conf
+  #       block: |
+  #         overlay 
+  #         br_netfilter
+  #       create: yes
+  #     notify: restart node
 
-    - name: sysctl config for k8s networking 
-      blockinfile:
-        path: /etc/sysctl.d/99-kubernetes-k8s.conf
-        block: |
-          net.bridge.bridge-nf-call-iptables = 1
-          net.ipv4.ip_forward = 1 
-          net.bridge.bridge-nf-call-ip6tables = 1 
-        create: yes
-      notify: restart node
+  #   - name: sysctl config for k8s networking 
+  #     blockinfile:
+  #       path: /etc/sysctl.d/99-kubernetes-k8s.conf
+  #       block: |
+  #         net.bridge.bridge-nf-call-iptables = 1
+  #         net.ipv4.ip_forward = 1 
+  #         net.bridge.bridge-nf-call-ip6tables = 1 
+  #       create: yes
+  #     notify: restart node
 
-    - name: install containerd
-      apt:
-        name: containerd
-        update_cache: yes
+  #   - name: install containerd
+  #     apt:
+  #       name: containerd
+  #       update_cache: yes
 
-    - name: enable containerd service
-      systemd:
-        name: containerd
-        state: started
-        enabled: yes
+  #   - name: enable containerd service
+  #     systemd:
+  #       name: containerd
+  #       state: started
+  #       enabled: yes
 
-    - name: containerd config
-      template:
-        src: ./tpl-containerd-config.toml
-        dest: /etc/containerd/config.toml
-      notify: restart node
+  #   - name: containerd config
+  #     template:
+  #       src: # ./tpl-containerd-config.toml
+  #       dest: /etc/containerd/config.toml
+  #     notify: restart node
 
-  handlers:
-    - name: restart node
-      command: /sbin/reboot
-      async: 1
-      poll: 0
-      ignore_errors: yes
-      changed_when: false
+  # handlers:
+  #   - name: restart node
+  #     command: /sbin/reboot
+  #     async: 1
+  #     poll: 0
+  #     ignore_errors: yes
+  #     changed_when: false
 
-    - name: restart containerd
-      systemd:
-        name: containerd
-        state: restarted
+  #   - name: restart containerd
+  #     systemd:
+  #       name: containerd
+  #       state: restarted

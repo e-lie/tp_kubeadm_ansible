@@ -1,0 +1,44 @@
+- hosts: localhost
+
+  vars:
+    kubeconfig_path: "~/.kube/inkus.kubeconfig"
+
+  tasks:
+
+
+########### ARGOCD
+
+    - name: add argo chart repo
+      kubernetes.core.helm_repository:
+        name: argo
+        repo_url: "https://argoproj.github.io/argo-helm"
+        force_update: true
+    
+    - name: install argo-cd chart
+      kubernetes.core.helm:
+        kubeconfig: "{{ kubeconfig_path }}"
+        name: argo-cd
+        chart_ref: argo/argo-cd
+        release_namespace: argocd
+        create_namespace: true
+        chart_version: 6.7.3
+        values:
+          server:
+            ingress:
+              enabled: true
+              hosts:
+                - argocd.kluster.dopl.uk
+              https: true
+              tls:
+                - secretName: argocd-secret
+                  hosts: 
+                    - argocd.kluster.dopl.uk
+              annotations:
+                cert-manager.io/cluster-issuer: selfsigned
+                kubernetes.io/ingress.class: nginx
+                # kubernetes.io/tls-acme: "true"
+                # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+                # If you encounter a redirect loop or are getting a 307 response code 
+                # then you need to force the nginx ingress to connect to the backend using HTTPS.
+                #
+                nginx.ingress.kubernetes.io/backend-protocol: HTTPS

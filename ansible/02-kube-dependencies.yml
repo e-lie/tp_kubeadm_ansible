@@ -7,37 +7,37 @@
     k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/"
   
   tasks:
-    - name: ensure curl installed
-      apt:
-        name: curl
-        state: present
-        update_cache: yes
+    # - name: ensure curl installed
+    #   apt:
+    #     name: curl
+    #     state: present
+    #     update_cache: yes
 
-    - name: Get Kubernetes package key
-      shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
-      args:
-        creates: "{{ k8s_gpgpath }}"
+    # - name: Get Kubernetes package key
+    #   shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+    #   args:
+    #     creates: "{{ k8s_gpgpath }}"
 
-    - name: Install Kubernetes repository
-      apt_repository:
-        filename: kubernetes
-        repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
+    # - name: Install Kubernetes repository
+    #   apt_repository:
+    #     filename: kubernetes
+    #     repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
 
-    - name: install kubelet
-      apt:
-        name: kubelet
-        state: present
+    # - name: install kubelet
+    #   apt:
+    #     name: kubelet
+    #     state: present
 
-    - name: install kubeadm
-      apt:
-        name: kubeadm
-        state: present
+    # - name: install kubeadm
+    #   apt:
+    #     name: kubeadm
+    #     state: present
 
 - hosts: control_plane
   become: yes
   tasks:
-    - name: install kubectl
-      apt:
-        name: kubectl
-        state: present
-        force: yes
+    # - name: install kubectl
+    #   apt:
+    #     name: kubectl
+    #     state: present
+    #     force: yes
