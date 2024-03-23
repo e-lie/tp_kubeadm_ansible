@@ -57,10 +57,10 @@ _recreate_infra() {
 
 _main() {
 
-  if [[ "${1:-}" =~ ^setup_terraform$  ]]
+  if [[ "${1:-}" =~ ^terraform$  ]]
   then
     _setup_terraform
-  elif [[ "${1:-}" =~ ^setup_ansible$  ]]
+  elif [[ "${1:-}" =~ ^ansible$  ]]
   then
     _setup_ansible
   elif [[ "${1:-}" =~ ^destroy$  ]]
@@ -69,10 +69,10 @@ _main() {
   elif [[ "${1:-}" =~ ^recreate$  ]]
   then
     _recreate_infra
-  elif [[ "${1:-}" =~ ^setup_full$  ]]
+  elif [[ "${1:-}" =~ ^full$  ]]
   then
     _setup_full
-  elif [[ "${1:-}" =~ ^setup_all$  ]]
+  elif [[ "${1:-}" =~ ^all$  ]]
   then
     _setup_full
   else

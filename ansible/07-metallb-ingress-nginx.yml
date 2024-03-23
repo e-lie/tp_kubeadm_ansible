@@ -1,0 +1,70 @@
+- hosts: localhost
+
+  vars:
+    kubeconfig_path: "~/.kube/inkus.kubeconfig"
+
+###########################################
+#     UPDATE METALLB IPS BELOW !!!        #
+###########################################
+
+  tasks:
+    # - name: ensure python3-kubernetes lib is installed on the control plane machine
+    #   apt:
+    #     name: python3-kubernetes
+    #     state: present
+    #     # update-cache: yes
+
+########### METALLB
+
+    - name: add metallb chart repo
+      kubernetes.core.helm_repository:
+        name: metallb
+        repo_url: "https://metallb.github.io/metallb"
+        force_update: true
+
+    - name: install metallb chart
+      kubernetes.core.helm:
+        kubeconfig: "{{ kubeconfig_path }}"
+        name: metallb
+        chart_ref: metallb/metallb
+        chart_version: 0.13.10
+        release_namespace: metallb-system
+        create_namespace: true
+        values: {}
+
+    - name: create metallb IPAddressPool
+      kubernetes.core.k8s:
+        kubeconfig: "{{ kubeconfig_path }}"
+        definition:
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: freebox-ips
+            namespace: metallb-system
+          spec:
+            addresses:
+            - 192.168.1.152/32
+
+    # - name: create metallb L2advertisment
+    #   kubernetes.core.k8s:
+    #     kubeconfig: ~/.kube/kluster.kubeconfig
+    #     definition:
+
+########### INGRESS NGINX
+  
+    - name: add ingress nginx chart repo
+      kubernetes.core.helm_repository:
+        name: ingress-nginx
+        repo_url: "https://kubernetes.github.io/ingress-nginx"
+        force_update: true
+    
+    - name: install ingress nginx chart
+      kubernetes.core.helm:
+        kubeconfig: "{{ kubeconfig_path }}"
+        name: ingress-nginx
+        chart_ref: ingress-nginx/ingress-nginx
+        chart_version: 4.7.1
+        release_namespace: ingress-nginx
+        create_namespace: true
+        values:
+          replicas: 2

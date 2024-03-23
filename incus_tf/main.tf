@@ -25,6 +25,7 @@ resource "incus_instance" "cp0" {
   ephemeral = false
   type = "virtual-machine"
   remote = "manjatour"
+  running = true
 }
 
 resource "incus_instance" "worker0" {
@@ -34,6 +35,7 @@ resource "incus_instance" "worker0" {
   ephemeral = false
   type = "virtual-machine"
   remote = "manjatour"
+  running = true
 }
 
 resource "incus_instance" "worker1" {
@@ -43,6 +45,7 @@ resource "incus_instance" "worker1" {
   ephemeral = false
   type = "virtual-machine"
   remote = "manjatour"
+  running = true
 }
 
 resource "incus_instance" "worker2" {
@@ -52,6 +55,7 @@ resource "incus_instance" "worker2" {
   ephemeral = false
   type = "virtual-machine"
   remote = "tachou_eth"
+  running = true
 }
 
 resource "incus_instance" "worker3" {
@@ -61,6 +65,7 @@ resource "incus_instance" "worker3" {
   ephemeral = false
   type = "virtual-machine"
   remote = "tachou_eth"
+  running = true
 }
 
 resource "incus_instance" "worker4" {
@@ -70,6 +75,17 @@ resource "incus_instance" "worker4" {
   ephemeral = false
   type = "virtual-machine"
   remote = "tachou_eth"
+  running = true
+}
+
+resource "incus_instance" "worker5" {
+  name      = "inkus-worker5"
+  image     = "images:debian/trixie/cloud"
+  profiles  = ["k8s-node"]
+  ephemeral = false
+  type = "virtual-machine"
+  remote = "tachou_eth"
+  running = true
 }
 
 resource "ansible_host" "inkus-cp0" {
@@ -119,6 +135,15 @@ resource "ansible_host" "inkus-worker4" {
         ansible_host = incus_instance.worker4.ipv4_address
     }
 }
+
+resource "ansible_host" "inkus-worker5" {
+    inventory_hostname = "inkus-worker5"
+    groups = ["workers", "inkus_cluster"]
+    vars = {
+        ansible_host = incus_instance.worker4.ipv4_address
+    }
+}
+
 
 resource "ansible_group" "inkus" {
   inventory_group_name = "inkus_cluster"

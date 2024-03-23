@@ -32,3 +32,4 @@
 - import_playbook: 04-slurp-kubeconfig.yml
 - import_playbook: 05-cilium-cni.yml
 - import_playbook: 06-join-workers.yml
+- import_playbook: 06-join-workers.yml
