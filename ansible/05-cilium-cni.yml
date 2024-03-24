@@ -16,4 +16,9 @@
         chart_version: 1.15.2
         release_namespace: kube-system
         # create_namespace: true
-        values: {}
+        values:
+          hubble:
+            relay:
+              enabled: true
+            ui:
+              enabled: true
