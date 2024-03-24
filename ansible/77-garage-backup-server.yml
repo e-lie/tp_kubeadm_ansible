@@ -1,0 +1,11 @@
+- hosts: backup-s3
+  become: yes
+  roles:
+    - zorun.garage
+  vars:
+    garage_version: "0.9.3"
+    garage_local_template: "garage.toml"
+    garage_metadata_dir: "/var/lib/garage"
+    garage_data_dir: "/mnt/data"
+    my_rpc_secret: "130458ccce56b518db49e5f72029071b5e0fcbe514052c108036d361a087643f"
+    my_admin_token: "7b3e91b552089c63ab94eb95f62324fb4u38c9a6d71a69daefae0c5047b33bb7"

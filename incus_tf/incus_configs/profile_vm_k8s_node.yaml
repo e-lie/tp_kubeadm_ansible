@@ -17,6 +17,8 @@ config:
       ssh-authorized-keys:
         # id_k8s_incus
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+kbmTg2ct457z/0fjnAaRys0mP869ckQKo2VagFXxW
+        # id_stagiaire
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBXHgv6fDeMM/zbqXpzdANeNbltG74+2Q1pBC9CXRc0M
       keyboard:
           layout: fr
   limits.cpu: "2"

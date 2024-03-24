@@ -26,6 +26,22 @@ resource "incus_instance" "cp0" {
   type = "virtual-machine"
   remote = "manjatour"
   running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
+}
+
+resource "incus_instance" "backup-s3" {
+  name      = "backup-s3"
+  image     = "images:debian/trixie/cloud"
+  profiles  = ["k8s-node"]
+  ephemeral = false
+  type = "virtual-machine"
+  remote = "tachou_eth"
+  running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "incus_instance" "worker0" {
@@ -36,6 +52,9 @@ resource "incus_instance" "worker0" {
   type = "virtual-machine"
   remote = "manjatour"
   running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "incus_instance" "worker1" {
@@ -46,6 +65,9 @@ resource "incus_instance" "worker1" {
   type = "virtual-machine"
   remote = "manjatour"
   running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "incus_instance" "worker2" {
@@ -56,6 +78,9 @@ resource "incus_instance" "worker2" {
   type = "virtual-machine"
   remote = "tachou_eth"
   running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "incus_instance" "worker3" {
@@ -66,6 +91,9 @@ resource "incus_instance" "worker3" {
   type = "virtual-machine"
   remote = "tachou_eth"
   running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "incus_instance" "worker4" {
@@ -76,16 +104,9 @@ resource "incus_instance" "worker4" {
   type = "virtual-machine"
   remote = "tachou_eth"
   running = true
-}
-
-resource "incus_instance" "worker5" {
-  name      = "inkus-worker5"
-  image     = "images:debian/trixie/cloud"
-  profiles  = ["k8s-node"]
-  ephemeral = false
-  type = "virtual-machine"
-  remote = "tachou_eth"
-  running = true
+  config = {
+    "user.access_interface" = "enp5s0"
+  }
 }
 
 resource "ansible_host" "inkus-cp0" {
@@ -95,6 +116,14 @@ resource "ansible_host" "inkus-cp0" {
         ansible_host = incus_instance.cp0.ipv4_address
     }
 }
+
+resource "ansible_host" "backup-s3" {
+    inventory_hostname = "backup-s3"
+    vars = {
+        ansible_host = incus_instance.backup-s3.ipv4_address
+    }
+}
+
 
 resource "ansible_host" "inkus-worker0" {
     inventory_hostname = "inkus-worker0"
@@ -136,17 +165,9 @@ resource "ansible_host" "inkus-worker4" {
     }
 }
 
-resource "ansible_host" "inkus-worker5" {
-    inventory_hostname = "inkus-worker5"
-    groups = ["workers", "inkus_cluster"]
-    vars = {
-        ansible_host = incus_instance.worker4.ipv4_address
-    }
-}
 
-
-resource "ansible_group" "inkus" {
-  inventory_group_name = "inkus_cluster"
+resource "ansible_group" "all" {
+  inventory_group_name = "all"
   vars = {
     ansible_user="kadmin"
     ansible_port=22

@@ -12,7 +12,7 @@
   #         overlay 
   #         br_netfilter
   #       create: yes
-  #     notify: restart node
+  #     #notify: restart node
 
   #   - name: sysctl config for k8s networking 
   #     blockinfile:
@@ -22,7 +22,7 @@
   #         net.ipv4.ip_forward = 1 
   #         net.bridge.bridge-nf-call-ip6tables = 1 
   #       create: yes
-  #     notify: restart node
+  #     #notify: restart node
 
   #   - name: install containerd
   #     apt:
@@ -37,9 +37,16 @@
 
   #   - name: containerd config
   #     template:
-  #       src: # ./tpl-containerd-config.toml
+  #       src: ./tpl-containerd-config.toml
   #       dest: /etc/containerd/config.toml
-  #     notify: restart node
+  #     #notify: restart node
+    
+  #   - name: restart node
+  #     command: /sbin/reboot
+  #     async: 1
+  #     poll: 0
+  #     ignore_errors: yes
+  #     changed_when: false
 
   # handlers:
   #   - name: restart node
