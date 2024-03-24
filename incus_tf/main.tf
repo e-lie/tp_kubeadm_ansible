@@ -31,18 +31,18 @@ resource "incus_instance" "cp0" {
   }
 }
 
-resource "incus_instance" "backup-s3" {
-  name      = "backup-s3"
-  image     = "images:debian/trixie/cloud"
-  profiles  = ["k8s-node"]
-  ephemeral = false
-  type = "virtual-machine"
-  remote = "tachou_eth"
-  running = true
-  config = {
-    "user.access_interface" = "enp5s0"
-  }
-}
+# resource "incus_instance" "backup-s3" {
+#   name      = "backup-s3"
+#   image     = "images:debian/trixie/cloud"
+#   profiles  = ["k8s-node"]
+#   ephemeral = false
+#   type = "virtual-machine"
+#   remote = "tachou_eth"
+#   running = true
+#   config = {
+#     "user.access_interface" = "enp5s0"
+#   }
+# }
 
 resource "incus_instance" "worker0" {
   name      = "kluster-worker0"
@@ -117,12 +117,12 @@ resource "ansible_host" "kluster-cp0" {
     }
 }
 
-resource "ansible_host" "backup-s3" {
-    inventory_hostname = "backup-s3"
-    vars = {
-        ansible_host = incus_instance.backup-s3.ipv4_address
-    }
-}
+# resource "ansible_host" "backup-s3" {
+#     inventory_hostname = "backup-s3"
+#     vars = {
+#         ansible_host = incus_instance.backup-s3.ipv4_address
+#     }
+# }
 
 
 resource "ansible_host" "kluster-worker0" {
