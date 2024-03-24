@@ -1,7 +1,7 @@
 - hosts: localhost
 
   vars:
-    kubeconfig_path: "~/.kube/inkus.kubeconfig"
+    kubeconfig_path: "~/.kube/kluster.kubeconfig"
 
 ###########################################
 #     UPDATE METALLB IPS BELOW !!!        #

@@ -1,4 +1,4 @@
-- hosts: inkus_cluster
+- hosts: kluster_cluster
   become: yes
   tasks:
     - name: ensure open-iscsi is present for longhorn to work
@@ -10,7 +10,7 @@
 - hosts: localhost
 
   vars:
-    kubeconfig_path: "~/.kube/inkus.kubeconfig"
+    kubeconfig_path: "~/.kube/kluster.kubeconfig"
 
 ###########################################
 #     UPDATE METALLB IPS BELOW !!!        #

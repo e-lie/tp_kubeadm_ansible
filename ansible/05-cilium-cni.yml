@@ -10,7 +10,7 @@
 
     - name: install cilium chart
       kubernetes.core.helm:
-        kubeconfig: ~/.kube/inkus.kubeconfig
+        kubeconfig: ~/.kube/kluster.kubeconfig
         name: cilium
         chart_ref: cilium/cilium
         chart_version: 1.15.2

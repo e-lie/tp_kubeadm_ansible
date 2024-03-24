@@ -1,4 +1,4 @@
-- hosts: inkus-cp0
+- hosts: kluster-cp0
   become: yes
 
   tasks:
